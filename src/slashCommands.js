@@ -67,10 +67,45 @@ const slashCommands = [
           .addChoices(
             { name: 'Overview', value: 'overview' },
             { name: 'Goals', value: 'goals' },
-            { name: 'Timeline', value: 'timeline' }
+            { name: 'Timeline', value: 'timeline' },
+            { name: 'GitHub', value: 'github' }
           )),
     execute: async (interaction) => {
       const details = interaction.options.getString('details') || 'overview';
+      
+      if (details === 'github') {
+        try {
+          // Hardcoded GitHub repository URL
+          const repoUrl = 'https://github.com/dev-ayooohi/AyoooHI-ASSISTANT';
+          
+          // Extract owner and repo name from the URL
+          const urlPattern = /github\.com\/([^\/]+)\/([^\/]+)/;
+          const match = repoUrl.match(urlPattern);
+          
+          if (match) {
+            const [, owner, repo] = match;
+            
+            const embed = new EmbedBuilder()
+              .setColor(0x3498DB)
+              .setTitle(`GitHub Repository: ${owner}/${repo}`)
+              .setURL(repoUrl)
+              .setDescription(`Information about the GitHub repository: ${owner}/${repo}`)
+              .addFields(
+                { name: 'Owner', value: owner, inline: true },
+                { name: 'Repository', value: repo, inline: true },
+                { name: 'Link', value: repoUrl, inline: false }
+              )
+              .setThumbnail('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
+              .setFooter({ text: 'GitHub Repository Information' })
+              .setTimestamp();
+            
+            await interaction.reply({ embeds: [embed] });
+            return;
+          }
+        } catch (error) {
+          console.error('Error processing GitHub URL:', error);
+        }
+      }
       
       let response;
       switch (details) {
@@ -81,7 +116,7 @@ const slashCommands = [
           response = 'Project timeline: Phase 1 (Setup) - Complete, Phase 2 (Development) - In progress, Phase 3 (Testing) - Upcoming';
           break;
         default: // overview
-          response = 'This is our community management project. For more information, visit our website: https://example.com/project';
+          response = 'This is our community management project. For more information, use "/project details:github" to see our GitHub repository.';
       }
       
       await interaction.reply({
@@ -276,7 +311,7 @@ const slashCommands = [
         .addFields(
           { name: '/say', value: 'Makes the bot say something' },
           { name: '/random', value: 'Generates a random number' },
-          { name: '/project', value: 'Shows information about our project' },
+          { name: '/project', value: 'Shows information about our project (options: overview, goals, timeline, github)' },
           { name: '/userinfo', value: 'Shows information about a user' },
           { name: '/serverinfo', value: 'Shows information about the server' },
           { name: '/poll', value: 'Creates a simple poll' },
