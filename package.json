@@ -1,0 +1,17 @@
+{
+  "name": "discord-assistant-bot",
+  "version": "1.0.0",
+  "description": "A helpful Discord bot with utility commands",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+} 
